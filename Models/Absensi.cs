@@ -15,6 +15,8 @@ namespace EmployeeApp.Models
 
         [ForeignKey("Karyawan")]
         public int Karyawan_Id { get; set; }
-        public string Tanggal_Hadir { get; set; }
+        [Required]
+        public DateTime Tanggal_Hadir { get; set; }
+
     }
 }

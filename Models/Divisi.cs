@@ -10,6 +10,7 @@ namespace EmployeeApp.Models
     {
         [Key]
         public int Id { get; set; }
+        [Required]
         public string Nama { get; set; }
     }
 }

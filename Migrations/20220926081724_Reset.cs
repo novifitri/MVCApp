@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace EmployeeApp.Migrations
 {
-    public partial class initial : Migration
+    public partial class Reset : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -13,7 +13,7 @@ namespace EmployeeApp.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Nama = table.Column<string>(nullable: true)
+                    Nama = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -26,12 +26,12 @@ namespace EmployeeApp.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Nama = table.Column<string>(nullable: true),
-                    NIK = table.Column<string>(nullable: true),
-                    Jenis_Kelamin = table.Column<string>(nullable: true),
+                    Nama = table.Column<string>(nullable: false),
+                    NIK = table.Column<string>(nullable: false),
+                    Jenis_Kelamin = table.Column<string>(nullable: false),
                     Tanggal_Lahir = table.Column<DateTime>(nullable: false),
                     Alamat = table.Column<string>(nullable: true),
-                    Nomor_Telp = table.Column<string>(nullable: true),
+                    Nomor_Telp = table.Column<string>(nullable: false),
                     Divisi_Id = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
@@ -52,7 +52,7 @@ namespace EmployeeApp.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Karyawan_Id = table.Column<int>(nullable: false),
-                    Tanggal_Hadir = table.Column<string>(nullable: true)
+                    Tanggal_Hadir = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -71,9 +71,9 @@ namespace EmployeeApp.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Username = table.Column<string>(nullable: true),
-                    Email = table.Column<string>(nullable: true),
-                    Password = table.Column<string>(nullable: true),
+                    Username = table.Column<string>(nullable: false),
+                    Email = table.Column<string>(nullable: false),
+                    Password = table.Column<string>(maxLength: 8, nullable: false),
                     Karyawan_Id = table.Column<int>(nullable: false)
                 },
                 constraints: table =>

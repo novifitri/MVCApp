@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EmployeeApp.Migrations
 {
     [DbContext(typeof(MyContext))]
-    [Migration("20220926042045_initial")]
-    partial class initial
+    [Migration("20220926081724_Reset")]
+    partial class Reset
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -31,8 +31,8 @@ namespace EmployeeApp.Migrations
                     b.Property<int>("Karyawan_Id")
                         .HasColumnType("int");
 
-                    b.Property<string>("Tanggal_Hadir")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<DateTime>("Tanggal_Hadir")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
@@ -49,6 +49,7 @@ namespace EmployeeApp.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Nama")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -70,15 +71,19 @@ namespace EmployeeApp.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Jenis_Kelamin")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("NIK")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Nama")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Nomor_Telp")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("Tanggal_Lahir")
@@ -99,15 +104,19 @@ namespace EmployeeApp.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Email")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Karyawan_Id")
                         .HasColumnType("int");
 
                     b.Property<string>("Password")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("nvarchar(8)")
+                        .HasMaxLength(8);
 
                     b.Property<string>("Username")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
