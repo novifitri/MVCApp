@@ -22,9 +22,9 @@
                 @Html.DisplayNameFor(model => model.Email)
             </th>     
             <th>
-                @Html.DisplayNameFor(model => model.Karyawan_Name)
+               Nama Karyawan
             </th>
-            <th></th>
+            <th>Aksi</th>
         </tr>
     </thead>
     <tbody>
@@ -40,7 +40,7 @@
                 @Html.DisplayFor(modelItem => item.Email)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Karyawan_Name)
+                @Html.DisplayFor(modelItem => item.Karyawan.Nama)
             </td>
             <td>
                 @Html.ActionLink("Edit", "Edit", new { id=item.Id}) |

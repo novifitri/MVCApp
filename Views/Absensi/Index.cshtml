@@ -16,12 +16,12 @@
                 @Html.DisplayNameFor(model => model.Id)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Karyawan_Name)
+                @Html.DisplayNameFor(model => model.Karyawan.Nama)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Tanggal_Hadir)
             </th>
-            <th></th>
+            <th>Aksi</th>
         </tr>
     </thead>
     <tbody>
@@ -31,7 +31,7 @@
                 @Html.DisplayFor(modelItem => item.Id)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Karyawan_Name)
+                @Html.DisplayFor(modelItem => item.Karyawan.Nama)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Tanggal_Hadir)

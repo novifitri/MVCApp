@@ -5,49 +5,29 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Data.SqlClient;
 using EmployeeApp.Models;
+using EmployeeApp.Context;
 
 namespace EmployeeApp.Controllers
 {
+
     public class DivisiController : Controller
     {
-        protected string connectionString = "Data Source =DESKTOP-4UE3BDQ;Initial Catalog=SistemAbsensi;User ID=test;Password=tes123;";
+        MyContext myContext;
+
+        public DivisiController(MyContext myContext)
+        {
+            this.myContext = myContext;
+        }
 
         public IActionResult Index()
         {
-            SqlConnection cnn = new SqlConnection(connectionString);
-            string query = "SELECT * FROM Divisi";
-            SqlCommand command = new SqlCommand(query, cnn);
-            List<Divisi> Divisi = new List<Divisi>();
-
-            try
-            {
-                cnn.Open();
-                using (SqlDataReader reader = command.ExecuteReader())
-                {
-                    if (reader.HasRows)
-                    {
-                        while (reader.Read())
-                        {
-                            Divisi divisi = new Divisi();
-                            divisi.Id = Convert.ToInt32(reader[0]);
-                            divisi.Nama = reader[1].ToString();
-                            Divisi.Add(divisi);
-                        }
-                    }                  
-                    reader.Close();
-                }
-                cnn.Close();
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.InnerException);
-            }
-            return View(Divisi);
+            var data = myContext.Divisi.ToList();
+            return View(data);
         }
 
         public IActionResult Details(int id)
         {
-            Divisi divisi = getDivisiById(id);
+            var divisi = myContext.Divisi.Find(id);
             return View(divisi);
         }
 
@@ -61,51 +41,28 @@ namespace EmployeeApp.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(Divisi divisi)
         {
-            using (SqlConnection sqlConnection = new SqlConnection(connectionString))
+            if (ModelState.IsValid)
             {
-                sqlConnection.Open();
-                SqlTransaction sqlTransaction = sqlConnection.BeginTransaction();
-                SqlCommand sqlCommand = sqlConnection.CreateCommand();
-                sqlCommand.Transaction = sqlTransaction;
-
-                SqlParameter sqlParameter1 = new SqlParameter();
-                sqlParameter1.ParameterName = "@Nama";
-                sqlParameter1.Value = divisi.Nama;
-
-                sqlCommand.Parameters.Add(sqlParameter1);
-
-                try
-                {
-                    sqlCommand.CommandText =
-                    "INSERT INTO Divisi " +
-                    "VALUES (@Nama) ";
-                    sqlCommand.ExecuteNonQuery();
-                    sqlTransaction.Commit();
-                    return RedirectToAction(actionName: "Index", controllerName: "Divisi");
-                }
-                catch (SqlException ex)
-                {
-        
-                    Console.WriteLine(ex.InnerException);
-                    try
-                    {
-                        sqlTransaction.Rollback();
-                    }
-                    catch (Exception exRollback)
-                    {
-                        Console.WriteLine(exRollback.Message); ;
-                    }
-                }
+                myContext.Divisi.Add(divisi);
+                var result = myContext.SaveChanges();
+                if (result > 0)
+                    return RedirectToAction("Index");
+                else
+                    ModelState.AddModelError(string.Empty, "Divisi gagal ditambah");
             }
-    
-            ModelState.AddModelError(string.Empty, "Nama tidak boleh lebih dari 255 karakter");
             return View();
+
         }
 
         [HttpGet]
         public IActionResult Edit(int id)
         {
-            Divisi divisi = getDivisiById(id);
+        
+            var divisi = myContext.Divisi.Find(id);
+            if(divisi == null)
+            {
+                return NotFound();
+            }
             return View(divisi);
         }
 
@@ -113,112 +70,39 @@ namespace EmployeeApp.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Edit(Divisi divisi)
         {
-            using (SqlConnection sqlConnection = new SqlConnection(connectionString))
+            var divisiToUpdate = myContext.Divisi.FirstOrDefault(d => d.Id == divisi.Id);
+            divisiToUpdate.Nama = divisi.Nama;
+            var result = myContext.SaveChanges();
+            if(result > 0)
             {
-                sqlConnection.Open();
-                SqlTransaction sqlTransaction = sqlConnection.BeginTransaction();
-                SqlCommand sqlCommand = sqlConnection.CreateCommand();
-                sqlCommand.Transaction = sqlTransaction;
-
-                SqlParameter sqlParameter1 = new SqlParameter();
-                sqlParameter1.ParameterName = "@Nama";
-                sqlParameter1.Value = divisi.Nama;
-
-                sqlCommand.Parameters.Add(sqlParameter1);
-
-                try
-                {
-                    sqlCommand.CommandText =
-                    "UPDATE Divisi " +
-                    "SET Nama= @Nama " +
-                    "WHERE Id = " + divisi.Id;
-                    sqlCommand.ExecuteNonQuery();
-                    sqlTransaction.Commit();
-                    return RedirectToAction(actionName: "Index", controllerName: "Divisi");
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.InnerException);
-                    try
-                    {
-                        sqlTransaction.Rollback();
-                    }
-                    catch (Exception exRollback)
-                    {
-                        Console.WriteLine(exRollback.Message); ;
-                    }
-                }
-            }
+                return RedirectToAction("Index");
+            } 
             ModelState.AddModelError(string.Empty, "Divisi gagal diupdate");
             return View();
 
         }
-        public Divisi getDivisiById(int id)
-        {
-            SqlConnection cnn = new SqlConnection(connectionString);
-            string query = "SELECT * FROM Divisi WHERE Id = " + id;
-            SqlCommand command = new SqlCommand(query, cnn);
-            Divisi divisi = new Divisi();
-            try
-            {
-                cnn.Open();
-                using (SqlDataReader reader = command.ExecuteReader())
-                {
-                    if (reader.HasRows)
-                    {
-                        while (reader.Read())
-                        {
-                            divisi.Id = Convert.ToInt32(reader[0]);
-                            divisi.Nama = reader[1].ToString();
-                        }
-                    }
-                    reader.Close();
-                }
-                cnn.Close();
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.InnerException);
-            }
-            return divisi;
-        }
+      
         [HttpGet]
         public IActionResult Delete(int id)
         {
-            Divisi divisi = getDivisiById(id);
+            var divisi = myContext.Divisi.Find(id);
+            if (divisi == null)
+            {
+                return NotFound();
+            }
             return View(divisi);
         }
 
         [HttpPost]
         public IActionResult Delete(Divisi divisi)
         {
-            using (SqlConnection sqlConnection = new SqlConnection(connectionString))
+            myContext.Divisi.Remove(divisi);
+            var result = myContext.SaveChanges();
+            if (result > 0)
             {
-                sqlConnection.Open();
-                SqlTransaction sqlTransaction = sqlConnection.BeginTransaction();
-                SqlCommand sqlCommand = sqlConnection.CreateCommand();
-                sqlCommand.Transaction = sqlTransaction;
-                try
-                {
-                    sqlCommand.CommandText = "DELETE Divisi WHERE Id = " + divisi.Id;
-                    sqlCommand.ExecuteNonQuery();
-                    sqlTransaction.Commit();
-                    return RedirectToAction(actionName: "Index", controllerName: "Divisi");
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.InnerException);
-                    try
-                    {
-                        sqlTransaction.Rollback();
-                    }
-                    catch (Exception exRollback)
-                    {
-                        Console.WriteLine(exRollback.Message); ;
-                    }
-                }
+                return RedirectToAction("Index");
             }
-            ModelState.AddModelError(string.Empty, "Server error");
+            ModelState.AddModelError(string.Empty, "Divisi gagal dihapus");
             return View();
         }
     }

@@ -34,9 +34,9 @@
                 @Html.DisplayNameFor(model => model.Nomor_Telp)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Divisi_Name)
+                Nama Divisi
             </th>
-            <th></th>
+            <th>Action</th>
         </tr>
     </thead>
     <tbody>
@@ -64,7 +64,7 @@
                 @Html.DisplayFor(modelItem => item.Nomor_Telp)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Divisi_Name)
+                @Html.DisplayFor(modelItem => item.Divisi.Nama)
             </td>
             <td>
                 @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
