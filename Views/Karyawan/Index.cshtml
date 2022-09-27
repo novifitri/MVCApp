@@ -55,7 +55,7 @@
                 @Html.DisplayFor(modelItem => item.Jenis_Kelamin)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Tanggal_Lahir)
+                @item.Tanggal_Lahir.ToString("dd/MM/yyyy")
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Alamat)

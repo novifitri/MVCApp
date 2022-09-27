@@ -12,16 +12,8 @@
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-
             <div class="form-group">
-                <label class="control-label">Karyawan</label>
-                <select value="" class="form-control" asp-for="Karyawan_Id">
-                    <option>Pilih Karyawan</option>
-                    @foreach (var karyawan in (IEnumerable<Karyawan>)ViewData["AllEmployee"])
-                    {
-                        <option value=@karyawan.Id>@karyawan.Nama</option>
-                    }
-                </select>
+                @Html.DropDownList("Karyawan_Id", ViewBag.KaryawansSelectList as SelectList, "Pilih Karyawan", new { @class = "form-control" })
             </div>
             <div class="form-group">
                 <label asp-for="Tanggal_Hadir" class="control-label"></label>

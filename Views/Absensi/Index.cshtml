@@ -34,7 +34,7 @@
                 @Html.DisplayFor(modelItem => item.Karyawan.Nama)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Tanggal_Hadir)
+                @item.Tanggal_Hadir.ToString("dd/MM/yyyy")
             </td>
             <td>
                 @Html.ActionLink("Edit", "Edit", new { id=item.Id}) |

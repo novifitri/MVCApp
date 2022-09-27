@@ -7,6 +7,7 @@ using System.Data.SqlClient;
 using EmployeeApp.Models;
 using EmployeeApp.Context;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace EmployeeApp.Controllers
 {
@@ -40,8 +41,7 @@ namespace EmployeeApp.Controllers
         [HttpGet]
         public IActionResult Create()
         {
-            List<Karyawan> karyawans = GetKaryawans();
-            ViewData["AllEmployee"] = karyawans;
+            ViewBag.KaryawansSelectList = new SelectList(GetKaryawans(), "Id", "Nama");
             return View();
         }
         [HttpPost]
@@ -54,8 +54,10 @@ namespace EmployeeApp.Controllers
                 var result = myContext.SaveChanges();
                 if (result > 0) return RedirectToAction("Index");
             }
-            ModelState.AddModelError(string.Empty, "Bad Request");
+            ModelState.AddModelError(string.Empty, "Server bermasalah, Absensi gagal ditambah");
             return View();
+
+
         }
 
         [HttpGet]
@@ -71,16 +73,19 @@ namespace EmployeeApp.Controllers
         public IActionResult Edit(Absensi absensi)
         {
             var absensiToUpdate = myContext.Absensi.FirstOrDefault(a => a.Id == absensi.Id);
-            absensiToUpdate.Karyawan_Id = absensi.Karyawan_Id;
-            absensiToUpdate.Tanggal_Hadir = absensi.Tanggal_Hadir;
-            var result = myContext.SaveChanges();
-            if (result > 0)
+            if (ModelState.IsValid)
             {
-                return RedirectToAction("Index");
+                absensiToUpdate.Karyawan_Id = absensi.Karyawan_Id;
+                absensiToUpdate.Tanggal_Hadir = absensi.Tanggal_Hadir;
+                var result = myContext.SaveChanges();
+                if (result > 0)
+                {
+                    return RedirectToAction("Index");
+                }
             }
             var karyawans = GetKaryawans();
             ViewData["AllKaryawan"] = karyawans;
-            ModelState.AddModelError(string.Empty, "Bad Request");
+            ModelState.AddModelError(string.Empty, "Absensi gagal diupdate");
             return View();
         }
         
